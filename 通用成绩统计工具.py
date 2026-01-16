@@ -86,6 +86,8 @@ class ScoreStatisticsApp:
         ttk.Button(frame_operate, text="开始统计（添加统计分）", command=self.start_statistics).pack(side="left", padx=10)
         ttk.Button(frame_operate, text="汇总所有文件总分", command=self.summary_total_score).pack(side="left", padx=10)
         ttk.Button(frame_operate, text="清空日志", command=self.clear_log).pack(side="left", padx=10)
+        # 在操作按钮区域新增重置按钮
+        ttk.Button(frame_operate, text="重置所有配置", command=self.reset_all).pack(side="left", padx=10)
 
         # 4. 日志显示区域
         frame_log = ttk.LabelFrame(self.root, text="3. 运行日志")
@@ -544,6 +546,33 @@ class ScoreStatisticsApp:
     def clear_log(self):
         self.log_text.delete(1.0, tk.END)
         self.log("日志已清空")
+
+    def reset_all(self):
+        # 1. 重置文件相关状态
+        self.file_paths = []
+        self.processed_paths = []
+        self.file_info = {}
+        self.file_label.config(text="未选择文件")
+
+        # 2. 重置分数段相关状态
+        self.score_segments = []
+        self.segment_count.set(0)
+        # 销毁分数段输入框
+        for widget in self.segment_frame.winfo_children():
+            widget.destroy()
+
+        # 3. 重置列选择/表头跳过行数
+        self.skip_header.set(0)
+        self.name_column_var.set("")
+        self.id_column_var.set("")
+        self.score_column_var.set("")
+        self.name_combobox['values'] = []
+        self.id_combobox['values'] = []
+        self.score_combobox['values'] = []
+
+        # 4. 清空日志（现有功能）
+        self.clear_log()
+        self.log("=== 工具已重置为初始状态 ===")
 
 
 if __name__ == "__main__":
